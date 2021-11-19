@@ -18,13 +18,13 @@
 
             .navbar{
                 padding: 10px;
-                background: teal;
+                background: mediumorchid;
             }
 
             .navbar li{
                 display: inline-block;
                 padding: 25px;
-                background: grey;
+                background: lightpink;
                 border-radius: 3px;
                 margin-left: 10px;
                 margin-right: 10px;
@@ -39,7 +39,68 @@
                 visibility: hidden;
             }
 
-            @media (max-width: 600px){
+            .favTable caption{
+                text-align: center;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .favTable th{
+                padding: 10pt;
+                background-color: orchid; 
+            }
+
+            .favTable td{
+                padding: 10pt;
+            }
+
+            .favTable tr:nth-child(even){
+                background-color: lavender;
+            }
+
+            .favTable tr:nth-child(odd){
+                background-color: lavenderblush;
+            }
+
+            .favTable tr:hover{
+                background-color: mediumorchid;
+                font-weight: bold;
+            }
+
+            .linkTable caption{
+                text-align: center;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .linkTable th{
+                padding: 10pt;
+                background-color: mediumaquamarine; 
+            }
+
+            .rowheader{
+                font-weight: bold;
+            }
+
+            .linkTable td{
+                padding: 10pt;
+                text-align: center;
+            }
+
+            .linkTable tr:nth-child(even){
+                background-color: aquamarine;
+            }
+
+            .linkTable tr:nth-child(odd){
+                background-color: mediumaquamarine;
+            }
+
+            .linkTable tr:hover{
+                background-color: azure;
+                font-weight: bold;
+            }
+
+            @media (max-width: 1200px){
                 .navbar li {
                     padding: 10px;
                 }
@@ -54,6 +115,10 @@
 
                 .select {
                     visibility: visible;
+                }
+
+                body{
+                    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
                 }
             }
 
@@ -95,17 +160,27 @@
         <p>I am originally from Virginia and I currently live in Charlotte, NC!</p>
         </center>
         <hr>
-        <h3>Links: </h3>
-        <ul>
-            <li>Github site: <a href="https://DrCarlArrington.github.io">Click Here</a> </li>
-            <li>Bootcamp Setup Demos site: 
-                <a href="https://DrCarlArrington.github.io/BootcampSetupDemos">Click Here</a>
-            </li>
-        </ul>
+        <center>
+            <table border="1" class="favTable">
+                <caption>
+                    Links
+                </caption>
+                <tr>
+                    <td><b>GitHub Site</b></td>
+                    <td><a href="https://DrCarlArrington.github.io">Click Here</a></td>
+                </tr>
+                <tr>
+                    <td><b>Bootcamp Setup Demos</b></td>
+                    <td><a href="https://DrCarlArrington.github.io/BootcampSetupDemos">Click Here</a></td>
+                </tr>
+            </table>
+        </center>
         <hr>
             <center>
-                <h3>Dr. Arrington's Favorites</h3>
-                <table border="1">
+                <table border="1" class="favTable">
+                    <caption>
+                        Dr. Arrington's Favorites
+                    </caption>
                     <tr>
                         <th>Movies</th>
                         <th>Programming Languages</th>
@@ -129,33 +204,51 @@
                 </table>
             </center>
         <hr>
+        <center>
         <p>
             Check out some more content 
             in the following pages:
         </p>
-        <h3>Heading Demo</h3>
-        <a href="headings.html">Click here to go to the heading demo web page</a>
-
-        <h3>Text Demo</h3>
-        <a href="textDemo.html">Click here to go to the text demo web page</a>
-
-        <h3>Unordered List Demo</h3>
-        <a href="bulletlist.html">Click here to go to the unordered list demo web page</a>
-
-        <h3>Ordered List Demo</h3>
-        <a href="numberlist.html">Click here to go to the ordered list demo web page</a>
-
-        <h3>CSS Demo</h3>
-        <a href="cssdemo.html">Click here to go to the CSS Demo web page</a>
-
-        <h3>Table Demo #1</h3>
-        <a href="tableDemo.html">Click here to go to the first table demo web page</a>
-
-        <h3>Table Demo #2</h3>
-        <a href="tableDemo2.html">Click here to go to the second table demo web page</a>
-
-        <h3>My Dream Vacation Page - Maldives Islands</h3>
-        <a href="travel.html">Click here to go to the Maldives Islands Travel demo web page</a>
+        <table border="2" class="linkTable">
+            <tr>
+                <th>Demo</th>
+                <th>Link</th>
+            </tr>
+            <tr>
+                <td class="rowheader">Heading Demo</td>
+                <td><a href="headings.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">Text Demo</td>
+                <td><a href="textDemo.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">Unordered List Demo</td>
+                <td><a href="bulletlist.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">Ordered List Demo</td>
+                <td><a href="numberlist.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">CSS Demo</td>
+                <td><a href="cssdemo.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">Table Demo #1</td>
+                <td><a href="tableDemo.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">Table Demo #2</td>
+                <td><a href="tableDemo2.html">Click Here</a></td>
+            </tr>
+            <tr>
+                <td class="rowheader">My Dream Vacation Page<br>
+                <i>Maldives Islands</i></td>
+                <td><a href="travel.html">Click Here</a></td>
+            </tr>
+        </table>
+        </center>
 
     </body>
 
