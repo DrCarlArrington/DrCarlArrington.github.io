@@ -1,10 +1,134 @@
-<html>
+<html lang="en-us">
     <head>
         <title>My Home Page</title>
+
+        <style>
+            h1 {
+                font-size: 40px;
+            }
+            body {
+                background-image: url("media/background.jpg");
+                background-size: 100% 100%;
+            }
+            img {
+                margin: 10px;
+                border: brown;
+                border-width: 5px;
+            }
+
+            .navbar{
+                padding: 10px;
+                background: teal;
+            }
+
+            .navbar li{
+                display: inline-block;
+                padding: 25px;
+                background: grey;
+                border-radius: 3px;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .navbar li a{
+                color: black;
+                text-decoration: none;
+            }
+
+            .select{
+                visibility: hidden;
+            }
+
+            @media (max-width: 600px){
+                .navbar li {
+                    padding: 10px;
+                }
+
+                nav {
+                    visibility: hidden;
+                }
+
+                .navbar ul{
+                    visibility: hidden;
+                }
+
+                .select {
+                    visibility: visible;
+                }
+            }
+
+        </style>
     </head>
 
     <body>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="textDemo.html">textDemo</a></li>
+                <li><a href="bulletlist.html">Unordered List Demo</a></li>
+                <li><a href="numberlist.html">Ordered List Demo</a></li>
+                <li><a href="cssdemo.html">CSS Demo</a></li>
+                <li><a href="tableDemo.html">Table Demo #1</a></li>
+                <li><a href="tableDemo2.html">Table Demo #2</a></li>
+                <li><a href="travel.html">Dream Vacation Site</a></li>
+            </ul>
+        </nav>
+
+        
+        <select class="select">
+            <option>Home</option>
+            <option>TextDemo</option>
+            <option>Unordered List</option>
+            <option>Ordered List</option>
+            <option>CSS Demo</option>
+            <option>Table Demo #1</option>
+            <option>Table Demo #2</option>
+            <option>Travel Demo</option>
+        </select>
+        
+        <center>
         <h1>Welcome to my web page!</h1>
+        <h2>Dr. Carl Arrington aka "Dr. A"</h2>
+        <img src="media/me.jpg" alt="Dr. A" width="200" height="200" title="Dr. A">
+        <br><br>
+        <p>Hello! I am Dr. Arrington and I currently teach the DataViz Bootcamp at GA Tech!</p>
+        <p>I am originally from Virginia and I currently live in Charlotte, NC!</p>
+        </center>
+        <hr>
+        <h3>Links: </h3>
+        <ul>
+            <li>Github site: <a href="https://DrCarlArrington.github.io">Click Here</a> </li>
+            <li>Bootcamp Setup Demos site: 
+                <a href="https://DrCarlArrington.github.io/BootcampSetupDemos">Click Here</a>
+            </li>
+        </ul>
+        <hr>
+            <center>
+                <h3>Dr. Arrington's Favorites</h3>
+                <table border="1">
+                    <tr>
+                        <th>Movies</th>
+                        <th>Programming Languages</th>
+                        <th>Sports</th>
+                    </tr>
+                    <tr>
+                        <td>Godfather I and II</td>
+                        <td>C++</td>
+                        <td>Basketball</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>Python</td>
+                        <td>American Football</td>
+                    </tr>
+                    <tr>
+                        <td>Indiana Jones and the Temple of Doom</td>
+                        <td>Java</td>
+                        <td>Boxing</td>
+                    </tr>
+                </table>
+            </center>
+        <hr>
         <p>
             Check out some more content 
             in the following pages:
