@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive: Modular Division and Greedy Algorithms</title>
+</head>
+<body>
+
+<style>
+    .interactive-box {
+        background-color: #e3f2fd;
+        border: 3px solid #2196f3;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+    
+    .calculator-area {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 15px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .input-row {
+        margin: 15px 0;
+    }
+    
+    .input-row label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #1565c0;
+        font-size: 15px;
+    }
+    
+    .input-row input {
+        width: 100%;
+        max-width: 300px;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .calc-button {
+        background-color: #2196f3;
+        color: white;
+        padding: 12px 30px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px 5px;
+    }
+    
+    .calc-button:hover {
+        background-color: #1976d2;
+    }
+    
+    .reset-button {
+        background-color: #ff9800;
+        color: white;
+        padding: 12px 30px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px 5px;
+    }
+    
+    .reset-button:hover {
+        background-color: #f57c00;
+    }
+    
+    .result-area {
+        background-color: #e8f5e9;
+        border-left: 5px solid #4caf50;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+        display: none;
+    }
+    
+    .result-area.visible {
+        display: block;
+    }
+    
+    .steps-box {
+        background-color: #f5f5f5;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #2196f3;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+    
+    .step-item {
+        padding: 8px;
+        margin: 5px 0;
+        background-color: #fff;
+        border-radius: 4px;
+    }
+    
+    .highlight-value {
+        background-color: #ffeb3b;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-weight: bold;
+    }
+    
+    .quiz-box {
+        background-color: #fff9e6;
+        border: 2px solid #ffc107;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+    }
+    
+    .quiz-choice {
+        display: block;
+        padding: 12px;
+        margin: 8px 0;
+        background-color: #fff;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .quiz-choice:hover {
+        background-color: #f5f5f5;
+        border-color: #2196f3;
+    }
+    
+    .quiz-choice.right-answer {
+        background-color: #c8e6c9;
+        border-color: #4caf50;
+    }
+    
+    .quiz-choice.wrong-answer {
+        background-color: #ffcdd2;
+        border-color: #f44336;
+    }
+    
+    .quiz-feedback {
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        display: none;
+    }
+    
+    .quiz-feedback.correct-msg {
+        background-color: #c8e6c9;
+        color: #2e7d32;
+        border-left: 5px solid #4caf50;
+        display: block;
+    }
+    
+    .quiz-feedback.incorrect-msg {
+        background-color: #ffcdd2;
+        color: #c62828;
+        border-left: 5px solid #f44336;
+        display: block;
+    }
+    
+    .coin-display {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .coin-box {
+        text-align: center;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        border: 2px solid #2196f3;
+        min-width: 110px;
+    }
+    
+    .coin-symbol {
+        font-size: 32px;
+        margin: 10px 0;
+    }
+    
+    .practice-box {
+        background-color: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 8px;
+    }
+    
+    .answer-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 25px;
+        font-size: 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px 0;
+    }
+    
+    .answer-button:hover {
+        background-color: #45a049;
+    }
+    
+    .answer-content {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #fff;
+        border-left: 4px solid #4caf50;
+    }
+    
+    .answer-content.showing {
+        display: block;
+    }
+    
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+    }
+    
+    .data-table th {
+        background-color: #2196f3;
+        color: #fff;
+        padding: 12px;
+        border: 1px solid #333;
+        text-align: left;
+    }
+    
+    .data-table td {
+        padding: 12px;
+        border: 1px solid #333;
+    }
+    
+    .data-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    
+    .data-table tr.total-row {
+        background-color: #e8f5e9;
+        font-weight: bold;
+    }
+    
+    .inline-code {
+        font-family: 'Courier New', monospace;
+        background-color: #f5f5f5;
+        padding: 2px 6px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+    }
+</style>
+
+<h1 style="color: #1a4d80; border-bottom: 3px solid #4a90e2; padding-bottom: 10px; font-size: 26px;">Interactive Practice: Modular Division and Greedy Algorithms</h1>
+
+<div style="background-color: #e3f2fd; border-left: 5px solid #2196f3; padding: 20px; margin: 25px 0;">
+    <h2 style="color: #1565c0; margin-top: 0; font-size: 20px;">🎯 Learning Objectives</h2>
+    <p style="font-size: 16px;">This interactive page helps you practice using division (/) and modulus (%) operators through hands-on exercises. You'll work with real examples, see step-by-step visualizations, and test your understanding with instant feedback.</p>
+</div>
+
+<!-- Calculator 1: Making Change -->
+<div class="interactive-box">
+    <h2 style="color: #1565c0; margin-top: 0; font-size: 20px;">💰 Interactive Calculator 1: Making Change</h2>
+    <p style="font-size: 16px;">Enter an amount in cents and watch the greedy algorithm break it down into coins!</p>
+    
+    <div class="calculator-area">
+        <div class="input-row">
+            <label for="changeInput">Enter amount in cents:</label>
+            <input type="number" id="changeInput" min="1" max="999" placeholder="e.g., 389">
+        </div>
+        
+        <button class="calc-button" onclick="calculateChange()">Calculate Change</button>
+        <button class="reset-button" onclick="resetChange()">Reset</button>
+        
+        <div id="changeResult" class="result-area">
+            <div id="changeOutput"></div>
+            <div id="changeSteps"></div>
+            <div id="changeVisual"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Calculator 2: Time Conversion -->
+<div class="interactive-box">
+    <h2 style="color: #1565c0; margin-top: 0; font-size: 20px;">⏰ Interactive Calculator 2: Time Conversion</h2>
+    <p style="font-size: 16px;">Convert total seconds into hours, minutes, and seconds using sequential division!</p>
+    
+    <div class="calculator-area">
+        <div class="input-row">
+            <label for="timeInput">Enter total seconds:</label>
+            <input type="number" id="timeInput" min="1" max="86400" placeholder="e.g., 7384">
+        </div>
+        
+        <button class="calc-button" onclick="calculateTime()">Convert Time</button>
+        <button class="reset-button" onclick="resetTime()">Reset</button>
+        
+        <div id="timeResult" class="result-area">
+            <div id="timeOutput"></div>
+            <div id="timeSteps"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Calculator 3: Inches to Feet -->
+<div class="interactive-box">
+    <h2 style="color: #1565c0; margin-top: 0; font-size: 20px;">📏 Interactive Calculator 3: Inches to Feet and Inches</h2>
+    <p style="font-size: 16px;">Practice the classic division and modulus example!</p>
+    
+    <div class="calculator-area">
+        <div class="input-row">
+            <label for="inchesInput">Enter total inches:</label>
+            <input type="number" id="inchesInput" min="1" max="1000" placeholder="e.g., 67">
+        </div>
+        
+        <button class="calc-button" onclick="calculateInches()">Convert to Feet</button>
+        <button class="reset-button" onclick="resetInches()">Reset</button>
+        
+        <div id="inchesResult" class="result-area">
+            <div id="inchesOutput"></div>
+            <div id="inchesSteps"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Quiz Section -->
+<div style="margin-top: 50px;">
+    <h2 style="color: #1a4d80; border-bottom: 2px solid #4a90e2; padding-bottom: 10px; font-size: 22px;">📝 Interactive Quiz: Test Your Understanding</h2>
+    
+    <!-- Question 1 -->
+    <div class="quiz-box">
+        <h3 style="color: #856404; margin-top: 0; font-size: 18px;">Question 1: What does the modulus operator (%) return?</h3>
+        <div id="q1-options">
+            <label class="quiz-choice">
+                <input type="radio" name="q1" value="a" onclick="checkAnswer(1, 'a')">
+                A) The quotient of the division
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q1" value="b" onclick="checkAnswer(1, 'b')">
+                B) The remainder after division
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q1" value="c" onclick="checkAnswer(1, 'c')">
+                C) The larger of two numbers
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q1" value="d" onclick="checkAnswer(1, 'd')">
+                D) The product of two numbers
+            </label>
+        </div>
+        <div id="q1-feedback" class="quiz-feedback"></div>
+    </div>
+    
+    <!-- Question 2 -->
+    <div class="quiz-box">
+        <h3 style="color: #856404; margin-top: 0; font-size: 18px;">Question 2: What is the result of 67 / 12 in Java?</h3>
+        <div id="q2-options">
+            <label class="quiz-choice">
+                <input type="radio" name="q2" value="a" onclick="checkAnswer(2, 'a')">
+                A) 5.583333
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q2" value="b" onclick="checkAnswer(2, 'b')">
+                B) 5
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q2" value="c" onclick="checkAnswer(2, 'c')">
+                C) 6
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q2" value="d" onclick="checkAnswer(2, 'd')">
+                D) 7
+            </label>
+        </div>
+        <div id="q2-feedback" class="quiz-feedback"></div>
+    </div>
+    
+    <!-- Question 3 -->
+    <div class="quiz-box">
+        <h3 style="color: #856404; margin-top: 0; font-size: 18px;">Question 3: What is the result of 67 % 12 in Java?</h3>
+        <div id="q3-options">
+            <label class="quiz-choice">
+                <input type="radio" name="q3" value="a" onclick="checkAnswer(3, 'a')">
+                A) 5
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q3" value="b" onclick="checkAnswer(3, 'b')">
+                B) 12
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q3" value="c" onclick="checkAnswer(3, 'c')">
+                C) 7
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q3" value="d" onclick="checkAnswer(3, 'd')">
+                D) 0
+            </label>
+        </div>
+        <div id="q3-feedback" class="quiz-feedback"></div>
+    </div>
+    
+    <!-- Question 4 -->
+    <div class="quiz-box">
+        <h3 style="color: #856404; margin-top: 0; font-size: 18px;">Question 4: Why does a greedy algorithm process the largest unit first?</h3>
+        <div id="q4-options">
+            <label class="quiz-choice">
+                <input type="radio" name="q4" value="a" onclick="checkAnswer(4, 'a')">
+                A) It's faster to compute
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q4" value="b" onclick="checkAnswer(4, 'b')">
+                B) To minimize the total number of units needed
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q4" value="c" onclick="checkAnswer(4, 'c')">
+                C) Java requires it
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q4" value="d" onclick="checkAnswer(4, 'd')">
+                D) It doesn't matter which order
+            </label>
+        </div>
+        <div id="q4-feedback" class="quiz-feedback"></div>
+    </div>
+    
+    <!-- Question 5 -->
+    <div class="quiz-box">
+        <h3 style="color: #856404; margin-top: 0; font-size: 18px;">Question 5: You have 389 cents. After removing quarters (25¢ each), what operation gives you the remaining cents?</h3>
+        <div id="q5-options">
+            <label class="quiz-choice">
+                <input type="radio" name="q5" value="a" onclick="checkAnswer(5, 'a')">
+                A) 389 / 25
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q5" value="b" onclick="checkAnswer(5, 'b')">
+                B) 389 % 25
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q5" value="c" onclick="checkAnswer(5, 'c')">
+                C) 389 - 25
+            </label>
+            <label class="quiz-choice">
+                <input type="radio" name="q5" value="d" onclick="checkAnswer(5, 'd')">
+                D) 389 * 25
+            </label>
+        </div>
+        <div id="q5-feedback" class="quiz-feedback"></div>
+    </div>
+</div>
+
+<!-- Practice Exercises -->
+<div class="practice-box">
+    <h2 style="color: #856404; margin-top: 0; font-size: 20px;">✏️ Practice Exercises</h2>
+    <p style="font-size: 16px;">Solve these problems on paper first, then click to check your work!</p>
+    
+    <h3 style="color: #1565c0; font-size: 18px;">Exercise 1: Making Change</h3>
+    <p style="font-size: 16px;">You need to make change for 247 cents. How many quarters, dimes, nickels, and pennies?</p>
+    <button class="answer-button" onclick="toggleAnswer(1)">Show/Hide Answer</button>
+    <div id="answer1" class="answer-content">
+        <p style="font-size: 16px;"><strong>Answer:</strong></p>
+        <p style="font-size: 16px;">247 / 25 = 9 quarters (use 225 cents)</p>
+        <p style="font-size: 16px;">247 % 25 = 22 cents remaining</p>
+        <p style="font-size: 16px;">22 / 10 = 2 dimes (use 20 cents)</p>
+        <p style="font-size: 16px;">22 % 10 = 2 cents remaining</p>
+        <p style="font-size: 16px;">2 / 5 = 0 nickels</p>
+        <p style="font-size: 16px;">2 % 5 = 2 cents remaining</p>
+        <p style="font-size: 16px;">2 pennies</p>
+        <p style="font-size: 18px; font-weight: bold; color: #2e7d32; margin-top: 10px;">Result: 9 quarters, 2 dimes, 0 nickels, 2 pennies</p>
+    </div>
+    
+    <h3 style="color: #1565c0; margin-top: 30px; font-size: 18px;">Exercise 2: Time Conversion</h3>
+    <p style="font-size: 16px;">Convert 5000 seconds into hours, minutes, and seconds.</p>
+    <button class="answer-button" onclick="toggleAnswer(2)">Show/Hide Answer</button>
+    <div id="answer2" class="answer-content">
+        <p style="font-size: 16px;"><strong>Answer:</strong></p>
+        <p style="font-size: 16px;">5000 / 3600 = 1 hour (use 3600 seconds)</p>
+        <p style="font-size: 16px;">5000 % 3600 = 1400 seconds remaining</p>
+        <p style="font-size: 16px;">1400 / 60 = 23 minutes (use 1380 seconds)</p>
+        <p style="font-size: 16px;">1400 % 60 = 20 seconds remaining</p>
+        <p style="font-size: 18px; font-weight: bold; color: #2e7d32; margin-top: 10px;">Result: 1 hour, 23 minutes, 20 seconds</p>
+    </div>
+    
+    <h3 style="color: #1565c0; margin-top: 30px; font-size: 18px;">Exercise 3: Distance Conversion</h3>
+    <p style="font-size: 16px;">Convert 100 inches to feet and inches. (12 inches = 1 foot)</p>
+    <button class="answer-button" onclick="toggleAnswer(3)">Show/Hide Answer</button>
+    <div id="answer3" class="answer-content">
+        <p style="font-size: 16px;"><strong>Answer:</strong></p>
+        <p style="font-size: 16px;">100 / 12 = 8 feet (use 96 inches)</p>
+        <p style="font-size: 16px;">100 % 12 = 4 inches remaining</p>
+        <p style="font-size: 18px; font-weight: bold; color: #2e7d32; margin-top: 10px;">Result: 8 feet, 4 inches</p>
+    </div>
+</div>
+
+<!-- Challenge Problem -->
+<div style="background-color: #ffebee; border: 2px solid #f44336; padding: 20px; margin: 25px 0; border-radius: 8px;">
+    <h2 style="color: #c62828; margin-top: 0; font-size: 20px;">🏆 Challenge Problem</h2>
+    <p style="font-size: 16px;">Convert 10,000 seconds into days, hours, minutes, and seconds.</p>
+    <p style="font-size: 15px; color: #666;">Hint: 1 day = 86,400 seconds, 1 hour = 3,600 seconds, 1 minute = 60 seconds</p>
+    <button class="answer-button" onclick="toggleAnswer(4)">Show/Hide Solution</button>
+    <div id="answer4" class="answer-content">
+        <p style="font-size: 16px;"><strong>Solution:</strong></p>
+        <p style="font-size: 16px;">10000 / 86400 = 0 days</p>
+        <p style="font-size: 16px;">10000 % 86400 = 10000 seconds remaining</p>
+        <p style="font-size: 16px;">10000 / 3600 = 2 hours (use 7200 seconds)</p>
+        <p style="font-size: 16px;">10000 % 3600 = 2800 seconds remaining</p>
+        <p style="font-size: 16px;">2800 / 60 = 46 minutes (use 2760 seconds)</p>
+        <p style="font-size: 16px;">2800 % 60 = 40 seconds remaining</p>
+        <p style="font-size: 18px; font-weight: bold; color: #c62828; margin-top: 10px;">Result: 0 days, 2 hours, 46 minutes, 40 seconds</p>
+    </div>
+</div>
+
+<!-- Summary -->
+<div style="background-color: #e8f5e9; border: 2px solid #4caf50; padding: 20px; margin: 40px 0; border-radius: 8px;">
+    <h2 style="color: #2e7d32; margin-top: 0; font-size: 20px;">📚 Key Takeaways</h2>
+    <ul style="font-size: 16px; line-height: 1.8;">
+        <li><span class="inline-code">/</span> operator gives you the count (how many complete groups)</li>
+        <li><span class="inline-code">%</span> operator gives you the remainder (what's left over)</li>
+        <li>Greedy algorithms process largest units first for optimal results</li>
+        <li>Always use a "remaining" variable to track the remainder between steps</li>
+        <li>The pattern: extract unit → calculate remainder → move to next smaller unit</li>
+    </ul>
+</div>
+
+<div style="background-color: #1a4d80; color: #fff; padding: 20px; margin-top: 30px; text-align: center; border-radius: 8px;">
+    <p style="font-size: 16px; margin: 0;">Keep practicing! The more you use these operators, the more natural they'll become.</p>
+</div>
+
+<script>
+// Calculator 1: Making Change
+function calculateChange() {
+    var cents = parseInt(document.getElementById('changeInput').value);
+    
+    if (isNaN(cents) || cents <= 0) {
+        alert('Please enter a valid positive number!');
+        return;
+    }
+    
+    var QUARTER = 25;
+    var DIME = 10;
+    var NICKEL = 5;
+    
+    var remaining = cents;
+    var quarters = Math.floor(remaining / QUARTER);
+    remaining = remaining % QUARTER;
+    
+    var dimes = Math.floor(remaining / DIME);
+    remaining = remaining % DIME;
+    
+    var nickels = Math.floor(remaining / NICKEL);
+    remaining = remaining % NICKEL;
+    
+    var pennies = remaining;
+    var totalCoins = quarters + dimes + nickels + pennies;
+    
+    // Display results
+    var outputHTML = '<h4 style="color: #1565c0; font-size: 17px;">Change for ' + cents + ' cents:</h4>';
+    outputHTML += '<table class="data-table">';
+    outputHTML += '<tr><th>Coin</th><th>Count</th></tr>';
+    outputHTML += '<tr><td>Quarters (25¢)</td><td><strong>' + quarters + '</strong></td></tr>';
+    outputHTML += '<tr><td>Dimes (10¢)</td><td><strong>' + dimes + '</strong></td></tr>';
+    outputHTML += '<tr><td>Nickels (5¢)</td><td><strong>' + nickels + '</strong></td></tr>';
+    outputHTML += '<tr><td>Pennies (1¢)</td><td><strong>' + pennies + '</strong></td></tr>';
+    outputHTML += '<tr class="total-row"><td><strong>Total Coins</strong></td><td><strong>' + totalCoins + '</strong></td></tr>';
+    outputHTML += '</table>';
+    document.getElementById('changeOutput').innerHTML = outputHTML;
+    
+    // Display steps
+    var stepsHTML = '<h4 style="color: #1565c0; margin-top: 20px; font-size: 17px;">Step-by-Step Calculation:</h4>';
+    stepsHTML += '<div class="steps-box">';
+    stepsHTML += '<div class="step-item">Start: ' + cents + ' cents total</div>';
+    stepsHTML += '<div class="step-item">Quarters: ' + cents + ' / ' + QUARTER + ' = <span class="highlight-value">' + quarters + '</span> quarters</div>';
+    stepsHTML += '<div class="step-item">Remaining: ' + cents + ' % ' + QUARTER + ' = <span class="highlight-value">' + (cents % QUARTER) + '</span> cents</div>';
+    stepsHTML += '<div class="step-item">Dimes: ' + (cents % QUARTER) + ' / ' + DIME + ' = <span class="highlight-value">' + dimes + '</span> dimes</div>';
+    stepsHTML += '<div class="step-item">Remaining: ' + (cents % QUARTER) + ' % ' + DIME + ' = <span class="highlight-value">' + (cents % QUARTER % DIME) + '</span> cents</div>';
+    stepsHTML += '<div class="step-item">Nickels: ' + (cents % QUARTER % DIME) + ' / ' + NICKEL + ' = <span class="highlight-value">' + nickels + '</span> nickels</div>';
+    stepsHTML += '<div class="step-item">Pennies: ' + (cents % QUARTER % DIME % NICKEL) + ' = <span class="highlight-value">' + pennies + '</span> pennies</div>';
+    stepsHTML += '</div>';
+    document.getElementById('changeSteps').innerHTML = stepsHTML;
+    
+    // Visual display
+    var visualHTML = '<h4 style="color: #1565c0; margin-top: 20px; font-size: 17px;">Visual Breakdown:</h4>';
+    visualHTML += '<div class="coin-display">';
+    visualHTML += '<div class="coin-box"><div class="coin-symbol">🪙</div><div><strong>' + quarters + '</strong></div><div>Quarters</div></div>';
+    visualHTML += '<div class="coin-box"><div class="coin-symbol">💰</div><div><strong>' + dimes + '</strong></div><div>Dimes</div></div>';
+    visualHTML += '<div class="coin-box"><div class="coin-symbol">🔘</div><div><strong>' + nickels + '</strong></div><div>Nickels</div></div>';
+    visualHTML += '<div class="coin-box"><div class="coin-symbol">⚪</div><div><strong>' + pennies + '</strong></div><div>Pennies</div></div>';
+    visualHTML += '</div>';
+    document.getElementById('changeVisual').innerHTML = visualHTML;
+    
+    document.getElementById('changeResult').classList.add('visible');
+}
+
+function resetChange() {
+    document.getElementById('changeInput').value = '';
+    document.getElementById('changeResult').classList.remove('visible');
+}
+
+// Calculator 2: Time Conversion
+function calculateTime() {
+    var totalSeconds = parseInt(document.getElementById('timeInput').value);
+    
+    if (isNaN(totalSeconds) || totalSeconds <= 0) {
+        alert('Please enter a valid positive number!');
+        return;
+    }
+    
+    var SECONDS_PER_HOUR = 3600;
+    var SECONDS_PER_MINUTE = 60;
+    
+    var remaining = totalSeconds;
+    var hours = Math.floor(remaining / SECONDS_PER_HOUR);
+    remaining = remaining % SECONDS_PER_HOUR;
+    
+    var minutes = Math.floor(remaining / SECONDS_PER_MINUTE);
+    var seconds = remaining % SECONDS_PER_MINUTE;
+    
+    // Display results
+    var outputHTML = '<h4 style="color: #1565c0; font-size: 17px;">' + totalSeconds + ' seconds equals:</h4>';
+    outputHTML += '<p style="font-size: 24px; font-weight: bold; color: #2e7d32; margin: 15px 0;">';
+    outputHTML += hours + ' hours, ' + minutes + ' minutes, ' + seconds + ' seconds</p>';
+    document.getElementById('timeOutput').innerHTML = outputHTML;
+    
+    // Display steps
+    var stepsHTML = '<h4 style="color: #1565c0; margin-top: 20px; font-size: 17px;">Step-by-Step Calculation:</h4>';
+    stepsHTML += '<div class="steps-box">';
+    stepsHTML += '<div class="step-item">Start: ' + totalSeconds + ' seconds total</div>';
+    stepsHTML += '<div class="step-item">Hours: ' + totalSeconds + ' / ' + SECONDS_PER_HOUR + ' = <span class="highlight-value">' + hours + '</span> hours</div>';
+    stepsHTML += '<div class="step-item">Remaining: ' + totalSeconds + ' % ' + SECONDS_PER_HOUR + ' = <span class="highlight-value">' + (totalSeconds % SECONDS_PER_HOUR) + '</span> seconds</div>';
+    stepsHTML += '<div class="step-item">Minutes: ' + (totalSeconds % SECONDS_PER_HOUR) + ' / ' + SECONDS_PER_MINUTE + ' = <span class="highlight-value">' + minutes + '</span> minutes</div>';
+    stepsHTML += '<div class="step-item">Seconds: ' + (totalSeconds % SECONDS_PER_HOUR) + ' % ' + SECONDS_PER_MINUTE + ' = <span class="highlight-value">' + seconds + '</span> seconds</div>';
+    stepsHTML += '</div>';
+    document.getElementById('timeSteps').innerHTML = stepsHTML;
+    
+    document.getElementById('timeResult').classList.add('visible');
+}
+
+function resetTime() {
+    document.getElementById('timeInput').value = '';
+    document.getElementById('timeResult').classList.remove('visible');
+}
+
+// Calculator 3: Inches to Feet
+function calculateInches() {
+    var totalInches = parseInt(document.getElementById('inchesInput').value);
+    
+    if (isNaN(totalInches) || totalInches <= 0) {
+        alert('Please enter a valid positive number!');
+        return;
+    }
+    
+    var INCHES_PER_FOOT = 12;
+    
+    var feet = Math.floor(totalInches / INCHES_PER_FOOT);
+    var inches = totalInches % INCHES_PER_FOOT;
+    
+    // Display results
+    var outputHTML = '<h4 style="color: #1565c0; font-size: 17px;">' + totalInches + ' inches equals:</h4>';
+    outputHTML += '<p style="font-size: 24px; font-weight: bold; color: #2e7d32; margin: 15px 0;">';
+    outputHTML += feet + ' feet ' + inches + ' inches</p>';
+    document.getElementById('inchesOutput').innerHTML = outputHTML;
+    
+    // Display steps
+    var stepsHTML = '<h4 style="color: #1565c0; margin-top: 20px; font-size: 17px;">Step-by-Step Calculation:</h4>';
+    stepsHTML += '<div class="steps-box">';
+    stepsHTML += '<div class="step-item">Start: ' + totalInches + ' inches total</div>';
+    stepsHTML += '<div class="step-item">Feet: ' + totalInches + ' / ' + INCHES_PER_FOOT + ' = <span class="highlight-value">' + feet + '</span> complete feet</div>';
+    stepsHTML += '<div class="step-item">Remaining inches: ' + totalInches + ' % ' + INCHES_PER_FOOT + ' = <span class="highlight-value">' + inches + '</span> inches</div>';
+    stepsHTML += '<div class="step-item">Visual: [' + feet + ' feet = ' + (feet * 12) + ' inches] + [' + inches + ' inches] = ' + totalInches + ' inches total ✓</div>';
+    stepsHTML += '</div>';
+    document.getElementById('inchesSteps').innerHTML = stepsHTML;
+    
+    document.getElementById('inchesResult').classList.add('visible');
+}
+
+function resetInches() {
+    document.getElementById('inchesInput').value = '';
+    document.getElementById('inchesResult').classList.remove('visible');
+}
+
+// Quiz functionality
+var quizAnswers = {
+    1: 'b',
+    2: 'b',
+    3: 'c',
+    4: 'b',
+    5: 'b'
+};
+
+var quizExplanations = {
+    1: 'The modulus operator (%) returns the remainder after division. For example, 17 % 5 = 2 because 17 ÷ 5 = 3 with 2 left over.',
+    2: 'In Java, when both operands are integers, division returns only the whole number part (quotient). 67 ÷ 12 = 5 with remainder 7, so 67 / 12 = 5.',
+    3: 'The modulus operator gives the remainder. 67 ÷ 12 = 5 with remainder 7, so 67 % 12 = 7.',
+    4: 'A greedy algorithm processes the largest unit first to minimize the total number of units needed. For example, using quarters before pennies gives fewer total coins.',
+    5: 'The modulus operator (%) gives you the remainder after removing complete groups. 389 % 25 tells you how many cents remain after removing all possible quarters.'
+};
+
+function checkAnswer(questionNum, selectedAnswer) {
+    var correct = quizAnswers[questionNum];
+    var feedbackDiv = document.getElementById('q' + questionNum + '-feedback');
+    var options = document.querySelectorAll('input[name="q' + questionNum + '"]');
+    
+    // Disable all options and mark correct/incorrect
+    for (var i = 0; i < options.length; i++) {
+        options[i].disabled = true;
+        var label = options[i].parentElement;
+        if (options[i].value === correct) {
+            label.classList.add('right-answer');
+        } else if (options[i].value === selectedAnswer && selectedAnswer !== correct) {
+            label.classList.add('wrong-answer');
+        }
+    }
+    
+    // Show feedback
+    if (selectedAnswer === correct) {
+        feedbackDiv.className = 'quiz-feedback correct-msg';
+        feedbackDiv.innerHTML = '✓ Correct! ' + quizExplanations[questionNum];
+    } else {
+        feedbackDiv.className = 'quiz-feedback incorrect-msg';
+        feedbackDiv.innerHTML = '✗ Incorrect. ' + quizExplanations[questionNum];
+    }
+}
+
+// Toggle answer visibility
+function toggleAnswer(num) {
+    var answerDiv = document.getElementById('answer' + num);
+    if (answerDiv.classList.contains('showing')) {
+        answerDiv.classList.remove('showing');
+    } else {
+        answerDiv.classList.add('showing');
+    }
+}
+</script>
+
+</body>
+</html>
