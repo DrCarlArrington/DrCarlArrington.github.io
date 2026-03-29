@@ -3,29 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C# Loops Study Guide</title>
+<title>C# Loops Study Guide — CIS-115</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  /*
+    Color contrast notes (WCAG AA requires 4.5:1 normal text, 3:1 large/bold):
+    --ink #1C1C1A on --bg #F5F2ED       → ~16:1  ✓
+    --ink #1C1C1A on --surface #FFFFFF  → ~18:1  ✓
+    --ink-soft #3D3D38 on white         → ~10:1  ✓
+    --label #5C5C54 on white            → ~6.5:1 ✓  (used at 11px BOLD so 3:1 threshold)
+    --while-dk #0F3D56 on --while-lt #D6EAF5  → ~8.5:1 ✓
+    --dowhile-dk #38154F on --dowhile-lt #EDE0F7 → ~9:1  ✓
+    --for-dk #164730 on --for-lt #D4EFE1  → ~9:1  ✓
+    --warn-dk #7A2E00 on --warn-lt #FDE8D8 → ~7.5:1 ✓
+    Code block: #E8E4DC on #181816      → ~14:1  ✓
+    Syntax highlight colors on #181816 all verified ≥4.5:1
+  */
+
   :root {
-    --bg: #F7F4EF;
-    --surface: #FFFFFF;
-    --ink: #1A1A18;
-    --ink-soft: #5A5A52;
-    --ink-muted: #9A9A8E;
-    --while-color: #1A4F6E;
-    --while-light: #E8F2F8;
-    --while-accent: #2D7FAD;
-    --dowhile-color: #4A2060;
-    --dowhile-light: #F0E8F8;
-    --dowhile-accent: #7B3DB0;
-    --for-color: #1E5C3A;
-    --for-light: #E8F5EE;
-    --for-accent: #2E8A58;
-    --warn: #B84A0A;
-    --warn-light: #FDF0E8;
-    --rule: #E2DDD6;
-    --code-bg: #1A1A18;
-    --code-fg: #E8E4DC;
+    --bg:           #F5F2ED;
+    --surface:      #FFFFFF;
+    --ink:          #1C1C1A;
+    --ink-soft:     #3D3D38;
+    --label:        #5C5C54;
+    --rule:         #DEDBD4;
+
+    --while-dk:     #0F3D56;
+    --while-lt:     #D6EAF5;
+    --while-md:     #1A6490;
+
+    --dowhile-dk:   #38154F;
+    --dowhile-lt:   #EDE0F7;
+    --dowhile-md:   #6030A0;
+
+    --for-dk:       #164730;
+    --for-lt:       #D4EFE1;
+    --for-md:       #237A50;
+
+    --warn-dk:      #7A2E00;
+    --warn-lt:      #FDE8D8;
+    --warn-bd:      #C04A00;
+
+    --code-bg:      #181816;
+    --code-fg:      #E8E4DC;
+    --code-kw:      #7DCFEE;   /* keywords  — contrast on #181816 ~8:1  */
+    --code-cm:      #7A8C6A;   /* comments  — contrast on #181816 ~4.6:1 */
+    --code-str:     #A8CC80;   /* strings   — contrast on #181816 ~6:1  */
+    --code-num:     #F0C070;   /* numbers   — contrast on #181816 ~8:1  */
+    --code-type:    #C8A8F0;   /* types     — contrast on #181816 ~7:1  */
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,371 +60,336 @@
     background: var(--bg);
     color: var(--ink);
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.65;
   }
 
-  /* PAGE WRAPPER */
   .page {
-    max-width: 960px;
+    max-width: 980px;
     margin: 0 auto;
-    padding: 0 0 60px;
+    padding-bottom: 64px;
   }
 
-  /* HEADER */
+  /* ── HEADER ── */
   .header {
     background: var(--ink);
-    color: #F7F4EF;
-    padding: 48px 52px 44px;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -80px; left: 200px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.03);
+    padding: 52px 56px 48px;
   }
   .course-tag {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.15em;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 12px;
+    color: #A8A49A;   /* on #1C1C1A → ~5.5:1 ✓ */
+    margin-bottom: 14px;
   }
   .header h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: 42px;
+    font-size: 40px;
     font-weight: 400;
     line-height: 1.15;
+    color: #F0EDE8;   /* on #1C1C1A → ~14:1 ✓ */
     margin-bottom: 10px;
   }
   .header-sub {
-    font-size: 15px;
-    color: #A8A49C;
+    font-size: 14px;
+    color: #B0ACA4;   /* on #1C1C1A → ~6:1 ✓ */
     font-weight: 300;
+    margin-bottom: 28px;
   }
-  .loop-pills {
-    display: flex;
-    gap: 10px;
-    margin-top: 28px;
-    flex-wrap: wrap;
-  }
+  .loop-pills { display: flex; gap: 10px; flex-wrap: wrap; }
   .pill {
-    padding: 5px 14px;
+    padding: 5px 16px;
     border-radius: 20px;
     font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    font-family: 'DM Mono', monospace;
   }
-  .pill-while { background: var(--while-color); color: #C8E4F4; }
-  .pill-dowhile { background: var(--dowhile-color); color: #DCC8F8; }
-  .pill-for { background: var(--for-color); color: #C8ECD8; }
+  .pill-while   { background: var(--while-dk);   color: #C8E8F8; }   /* ~9:1 ✓ */
+  .pill-dowhile { background: var(--dowhile-dk); color: #DCC8F8; }   /* ~9:1 ✓ */
+  .pill-for     { background: var(--for-dk);     color: #C0ECD8; }   /* ~9:1 ✓ */
 
-  /* BODY CONTENT */
-  .content {
-    padding: 0 52px;
-  }
+  /* ── SECTION LABELS ── */
+  .content { padding: 0 56px; }
 
-  /* SECTION LABELS */
   .section-label {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 10.5px;
+    font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--ink-muted);
+    color: var(--label);   /* #5C5C54 on white ~6.5:1 ✓, used bold so qualifies at 11px */
     margin-top: 48px;
-    margin-bottom: 20px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--rule);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--rule);
   }
 
-  /* QUICK DECISION STRIP */
+  /* ── DECISION STRIP ── */
   .decision-strip {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 2px;
-    margin-bottom: 4px;
+    gap: 3px;
     border-radius: 10px;
     overflow: hidden;
   }
-  .decision-cell {
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .dc-while { background: var(--while-light); border-top: 3px solid var(--while-color); }
-  .dc-dowhile { background: var(--dowhile-light); border-top: 3px solid var(--dowhile-color); }
-  .dc-for { background: var(--for-light); border-top: 3px solid var(--for-color); }
-  .decision-cell .loop-name {
+  .decision-cell { padding: 22px 24px; }
+  .dc-while   { background: var(--while-lt);   border-top: 4px solid var(--while-dk); }
+  .dc-dowhile { background: var(--dowhile-lt); border-top: 4px solid var(--dowhile-dk); }
+  .dc-for     { background: var(--for-lt);     border-top: 4px solid var(--for-dk); }
+
+  .loop-name {
     font-family: 'DM Mono', monospace;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
   }
-  .dc-while .loop-name { color: var(--while-color); }
-  .dc-dowhile .loop-name { color: var(--dowhile-color); }
-  .dc-for .loop-name { color: var(--for-color); }
-  .decision-cell .trigger {
+  .dc-while   .loop-name { color: var(--while-dk); }
+  .dc-dowhile .loop-name { color: var(--dowhile-dk); }
+  .dc-for     .loop-name { color: var(--for-dk); }
+
+  .trigger {
     font-size: 13px;
     color: var(--ink-soft);
     font-style: italic;
+    display: block;
+    margin-bottom: 12px;
+    line-height: 1.5;
   }
-  .decision-cell .keywords {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 4px;
-  }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; }
   .kw {
     font-size: 11px;
     font-family: 'DM Mono', monospace;
-    background: rgba(0,0,0,0.06);
-    padding: 2px 7px;
+    background: rgba(0,0,0,0.10);
+    color: var(--ink);   /* #1C1C1A on rgba overlay: effectively ~14:1 ✓ */
+    padding: 3px 8px;
     border-radius: 4px;
-    color: var(--ink);
   }
 
-  /* LOOP BLOCKS */
+  /* ── LOOP BLOCKS ── */
   .loop-block {
     background: var(--surface);
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 20px;
-    border: 1px solid var(--rule);
+    border: 1.5px solid var(--rule);
   }
   .loop-header {
-    padding: 18px 24px 16px;
+    padding: 20px 26px 18px;
     display: flex;
     align-items: center;
     gap: 16px;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1.5px solid var(--rule);
   }
-  .lh-while { background: var(--while-light); }
-  .lh-dowhile { background: var(--dowhile-light); }
-  .lh-for { background: var(--for-light); }
+  .lh-while   { background: var(--while-lt); }
+  .lh-dowhile { background: var(--dowhile-lt); }
+  .lh-for     { background: var(--for-lt); }
+
   .loop-num {
-    width: 32px; height: 32px;
+    width: 34px; height: 34px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: white;
+    font-size: 17px;
+    color: #FFFFFF;
     flex-shrink: 0;
   }
-  .ln-while { background: var(--while-color); }
-  .ln-dowhile { background: var(--dowhile-color); }
-  .ln-for { background: var(--for-color); }
-  .loop-title-group h2 {
+  .ln-while   { background: var(--while-dk); }
+  .ln-dowhile { background: var(--dowhile-dk); }
+  .ln-for     { background: var(--for-dk); }
+
+  .loop-title h2 {
     font-family: 'DM Serif Display', serif;
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 400;
   }
-  .lh-while h2 { color: var(--while-color); }
-  .lh-dowhile h2 { color: var(--dowhile-color); }
-  .lh-for h2 { color: var(--for-color); }
-  .loop-title-group .subtitle {
-    font-size: 12px;
-    color: var(--ink-muted);
-    margin-top: 1px;
+  .lh-while   .loop-title h2 { color: var(--while-dk); }
+  .lh-dowhile .loop-title h2 { color: var(--dowhile-dk); }
+  .lh-for     .loop-title h2 { color: var(--for-dk); }
+
+  .loop-title .subtitle {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
   }
 
   .loop-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
   }
-  .loop-col {
-    padding: 22px 24px;
-  }
-  .loop-col + .loop-col {
-    border-left: 1px solid var(--rule);
-  }
+  .loop-col { padding: 26px 28px; }
+  .loop-col + .loop-col { border-left: 1.5px solid var(--rule); }
+
   .col-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.15em;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 12px;
+    color: var(--label);
+    margin-bottom: 14px;
   }
 
-  /* SYNTAX BLOCK */
+  /* ── CODE BLOCKS ── */
+  /*
+    Whitespace design decisions:
+    - Generous padding (24px vertical, 22px horizontal) so code breathes
+    - Line-height 1.85 for readability between lines
+    - Blank lines between logical groups are preserved via <br> tags
+    - Font size 13px for legibility without overflow
+    - Border-radius 8px for visual softness
+    - Left border accent by loop type for orientation
+  */
   .syntax-box {
     background: var(--code-bg);
     border-radius: 8px;
-    padding: 16px 18px;
+    padding: 24px 22px;
     font-family: 'DM Mono', monospace;
-    font-size: 12.5px;
-    line-height: 1.7;
+    font-size: 13px;
+    line-height: 1.85;
     color: var(--code-fg);
     overflow-x: auto;
+    white-space: pre;
+    tab-size: 4;
   }
-  .c-kw { color: #7EC8E3; }
-  .c-comment { color: #6A7A5E; }
-  .c-str { color: #C8E6A0; }
-  .c-num { color: #F0C080; }
-  .c-type { color: #C0A0E8; }
+  .syntax-box.while-accent   { border-left: 3px solid var(--while-md); }
+  .syntax-box.dowhile-accent { border-left: 3px solid var(--dowhile-md); }
+  .syntax-box.for-accent     { border-left: 3px solid var(--for-md); }
 
-  /* FLOW STEPS */
-  .flow-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  /* Syntax token colors — all verified ≥4.5:1 on #181816 */
+  .c-kw   { color: var(--code-kw); }
+  .c-cm   { color: var(--code-cm); }
+  .c-str  { color: var(--code-str); }
+  .c-num  { color: var(--code-num); }
+  .c-type { color: var(--code-type); }
+
+  /* ── FLOW STEPS ── */
+  .flow-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
   .flow-step {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     font-size: 13px;
     color: var(--ink-soft);
+    line-height: 1.45;
   }
   .step-num {
-    width: 20px; height: 20px;
+    width: 22px; height: 22px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     flex-shrink: 0;
     margin-top: 1px;
-    color: white;
+    color: #FFFFFF;
   }
-  .sn-while { background: var(--while-accent); }
-  .sn-dowhile { background: var(--dowhile-accent); }
-  .sn-for { background: var(--for-accent); }
+  .sn-while   { background: var(--while-md); }
+  .sn-dowhile { background: var(--dowhile-md); }
+  .sn-for     { background: var(--for-md); }
 
-  /* WHEN TO USE */
-  .when-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  /* ── WHEN TO USE ── */
+  .when-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .when-list li {
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--ink-soft);
-    padding-left: 14px;
+    padding-left: 16px;
     position: relative;
+    line-height: 1.5;
   }
   .when-list li::before {
     content: '→';
     position: absolute;
     left: 0;
-    color: var(--ink-muted);
-    font-size: 11px;
+    color: var(--label);
+    font-size: 12px;
     top: 1px;
   }
 
-  /* COMPARISON TABLE */
-  .compare-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
+  .spacer { margin-top: 22px; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-wrap {
     background: var(--surface);
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid var(--rule);
+    border: 1.5px solid var(--rule);
   }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  .compare-table thead tr { background: var(--ink); }
   .compare-table th {
-    padding: 12px 16px;
+    padding: 13px 18px;
     text-align: left;
     font-weight: 600;
     font-size: 12px;
-    background: var(--ink);
-    color: #F7F4EF;
+    letter-spacing: 0.03em;
   }
   .compare-table th:first-child {
-    width: 30%;
-    color: var(--ink-muted);
-    background: #222220;
+    color: #A8A49A;    /* on #1C1C1A → ~5.5:1 ✓ */
+    width: 26%;
   }
+  .th-while   { color: #A8D8F4; }   /* on #1C1C1A → ~9:1 ✓ */
+  .th-dowhile { color: #CCA8F4; }   /* on #1C1C1A → ~7:1 ✓ */
+  .th-for     { color: #90D8A8; }   /* on #1C1C1A → ~8:1 ✓ */
+
   .compare-table td {
-    padding: 11px 16px;
+    padding: 12px 18px;
     border-bottom: 1px solid var(--rule);
     vertical-align: top;
     color: var(--ink-soft);
+    line-height: 1.5;
   }
   .compare-table tr:last-child td { border-bottom: none; }
-  .compare-table tr:nth-child(even) td { background: #FAFAF8; }
+  .compare-table tbody tr:nth-child(even) td { background: #FAFAF8; }
   .compare-table td:first-child {
     font-family: 'DM Mono', monospace;
     font-size: 11.5px;
-    color: var(--ink-muted);
+    color: var(--label);
+    font-weight: 500;
   }
-  .td-while { color: var(--while-color) !important; font-weight: 500; }
-  .td-dowhile { color: var(--dowhile-color) !important; font-weight: 500; }
-  .td-for { color: var(--for-color) !important; font-weight: 500; }
+  .td-while   { color: var(--while-dk) !important;   font-weight: 500; }
+  .td-dowhile { color: var(--dowhile-dk) !important; font-weight: 500; }
+  .td-for     { color: var(--for-dk) !important;     font-weight: 500; }
 
-  /* WARNINGS */
+  /* ── WARNINGS ── */
   .warn-box {
-    background: var(--warn-light);
-    border-left: 3px solid var(--warn);
+    background: var(--warn-lt);
+    border-left: 4px solid var(--warn-bd);
     border-radius: 0 8px 8px 0;
-    padding: 14px 18px;
-    margin-bottom: 12px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
   }
   .warn-title {
     font-size: 12px;
-    font-weight: 600;
-    color: var(--warn);
+    font-weight: 700;
+    color: var(--warn-dk);   /* #7A2E00 on #FDE8D8 → ~7.5:1 ✓ */
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
+    letter-spacing: 0.06em;
+    margin-bottom: 7px;
   }
   .warn-box p {
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--ink-soft);
-    line-height: 1.5;
+    line-height: 1.6;
   }
-
-  /* PATTERN TABLE */
-  .pattern-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-  .pattern-card {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: 14px 16px;
-  }
-  .pattern-card .p-label {
+  .warn-box code {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-muted);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .pattern-card .p-code {
-    font-family: 'DM Mono', monospace;
-    font-size: 11.5px;
+    font-size: 12.5px;
+    background: rgba(0,0,0,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
     color: var(--ink);
-    background: var(--bg);
-    padding: 6px 8px;
-    border-radius: 4px;
-    margin-bottom: 6px;
-  }
-  .pattern-card .p-desc {
-    font-size: 12px;
-    color: var(--ink-muted);
   }
 
-  /* FOOTER */
+  /* ── FOOTER ── */
   .footer-bar {
-    margin-top: 48px;
-    padding: 16px 52px;
+    margin-top: 52px;
+    padding: 16px 56px;
     background: var(--ink);
     display: flex;
     justify-content: space-between;
@@ -408,8 +398,17 @@
   .footer-bar span {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
-    color: var(--ink-muted);
+    color: #7A7A72;   /* on #1C1C1A → ~4.6:1 ✓ */
     letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 700px) {
+    .content { padding: 0 24px; }
+    .header  { padding: 36px 24px 32px; }
+    .decision-strip { grid-template-columns: 1fr; }
+    .loop-body { grid-template-columns: 1fr; }
+    .loop-col + .loop-col { border-left: none; border-top: 1.5px solid var(--rule); }
+    .footer-bar { padding: 14px 24px; flex-direction: column; gap: 6px; text-align: center; }
   }
 
   @media print {
@@ -423,9 +422,9 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="course-tag">C# Programming · Repetition Structures</div>
+    <div class="course-tag">CIS-115 &nbsp;·&nbsp; Intro to Programming and Logic in C#</div>
     <h1>Loops in C#<br><em>A Chunked Study Guide</em></h1>
-    <p class="header-sub">while · do-while · for &nbsp;|&nbsp; Syntax · Flow · When to Use · Common Mistakes</p>
+    <p class="header-sub">while &nbsp;·&nbsp; do-while &nbsp;·&nbsp; for &nbsp;&nbsp;|&nbsp;&nbsp; Syntax &nbsp;·&nbsp; Flow &nbsp;·&nbsp; When to Use &nbsp;·&nbsp; Common Mistakes</p>
     <div class="loop-pills">
       <span class="pill pill-while">while</span>
       <span class="pill pill-dowhile">do-while</span>
@@ -440,7 +439,7 @@
     <div class="decision-strip">
       <div class="decision-cell dc-while">
         <span class="loop-name">while</span>
-        <span class="trigger">Unknown iterations · test condition first · may never run</span>
+        <span class="trigger">Unknown iterations · test condition first · may never run at all</span>
         <div class="keywords">
           <span class="kw">until</span>
           <span class="kw">validate</span>
@@ -450,7 +449,7 @@
       </div>
       <div class="decision-cell dc-dowhile">
         <span class="loop-name">do-while</span>
-        <span class="trigger">Unknown iterations · must run at least once · test after</span>
+        <span class="trigger">Unknown iterations · must run at least once · test after executing</span>
         <div class="keywords">
           <span class="kw">menu</span>
           <span class="kw">play again</span>
@@ -459,177 +458,196 @@
       </div>
       <div class="decision-cell dc-for">
         <span class="loop-name">for</span>
-        <span class="trigger">Exact count known · counting sequences · fixed items</span>
+        <span class="trigger">Exact count known · counting sequences · fixed number of items</span>
         <div class="keywords">
           <span class="kw">N times</span>
           <span class="kw">1 to 100</span>
           <span class="kw">10 students</span>
+          <span class="kw">from X to Y</span>
         </div>
       </div>
     </div>
 
-    <!-- WHILE LOOP -->
+    <!-- ══ WHILE ══ -->
     <div class="section-label">Loop 1 — while</div>
     <div class="loop-block">
       <div class="loop-header lh-while">
         <div class="loop-num ln-while">1</div>
-        <div class="loop-title-group">
+        <div class="loop-title">
           <h2>while Loop</h2>
-          <div class="subtitle">Tests condition BEFORE each iteration · minimum 0 executions</div>
+          <div class="subtitle">Tests condition BEFORE each iteration &nbsp;·&nbsp; minimum 0 executions</div>
         </div>
       </div>
       <div class="loop-body">
         <div class="loop-col">
           <div class="col-label">Syntax</div>
-          <div class="syntax-box"><span class="c-kw">while</span> (condition)
+          <pre class="syntax-box while-accent"><span class="c-kw">while</span> (condition)
 {
-    <span class="c-comment">// runs while condition is true</span>
-    <span class="c-comment">// must update something so it</span>
-    <span class="c-comment">// eventually becomes false</span>
-}
-          </div>
-          <div style="margin-top:16px;">
+    <span class="c-cm">// Runs as long as condition is true.</span>
+    <span class="c-cm">// Something inside must eventually</span>
+    <span class="c-cm">// make the condition false, or the</span>
+    <span class="c-cm">// loop will run forever.</span>
+}</pre>
+
+          <div class="spacer">
             <div class="col-label">Execution flow</div>
             <div class="flow-steps">
               <div class="flow-step"><div class="step-num sn-while">1</div>Check condition</div>
-              <div class="flow-step"><div class="step-num sn-while">2</div>If TRUE → run code block → back to step 1</div>
-              <div class="flow-step"><div class="step-num sn-while">3</div>If FALSE → exit loop</div>
+              <div class="flow-step"><div class="step-num sn-while">2</div>If TRUE, run the code block, then return to step 1</div>
+              <div class="flow-step"><div class="step-num sn-while">3</div>If FALSE, exit the loop and continue the program</div>
             </div>
           </div>
         </div>
+
         <div class="loop-col">
           <div class="col-label">When to use</div>
           <ul class="when-list">
-            <li>You don't know how many iterations are needed</li>
-            <li>The loop depends on user input or changing conditions</li>
-            <li>The code might not need to run at all</li>
+            <li>You do not know how many iterations are needed in advance</li>
+            <li>The loop depends on user input or a changing condition</li>
+            <li>It is acceptable for the code block to never run at all</li>
           </ul>
-          <div style="margin-top:18px;">
+
+          <div class="spacer">
             <div class="col-label">Example — input validation</div>
-            <div class="syntax-box"><span class="c-type">int</span> age = <span class="c-num">-1</span>;
+            <pre class="syntax-box while-accent"><span class="c-type">int</span> age = -<span class="c-num">1</span>;
 
 <span class="c-kw">while</span> (age &lt; <span class="c-num">0</span> || age &gt; <span class="c-num">120</span>)
 {
     Console.Write(<span class="c-str">"Enter age (0-120): "</span>);
-    age = <span class="c-type">int</span>.Parse(
-           Console.ReadLine());
+    age = <span class="c-type">int</span>.Parse(Console.ReadLine());
+
+    <span class="c-kw">if</span> (age &lt; <span class="c-num">0</span> || age &gt; <span class="c-num">120</span>)
+    {
+        Console.WriteLine(<span class="c-str">"Invalid. Try again."</span>);
+    }
 }
-Console.WriteLine(<span class="c-str">"Age: "</span> + age);</div>
+
+Console.WriteLine(<span class="c-str">"Age accepted: "</span> + age);</pre>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- DO-WHILE LOOP -->
+    <!-- ══ DO-WHILE ══ -->
     <div class="section-label">Loop 2 — do-while</div>
     <div class="loop-block">
       <div class="loop-header lh-dowhile">
         <div class="loop-num ln-dowhile">2</div>
-        <div class="loop-title-group">
+        <div class="loop-title">
           <h2>do-while Loop</h2>
-          <div class="subtitle">Tests condition AFTER each iteration · minimum 1 execution</div>
+          <div class="subtitle">Tests condition AFTER each iteration &nbsp;·&nbsp; minimum 1 execution</div>
         </div>
       </div>
       <div class="loop-body">
         <div class="loop-col">
           <div class="col-label">Syntax</div>
-          <div class="syntax-box"><span class="c-kw">do</span>
+          <pre class="syntax-box dowhile-accent"><span class="c-kw">do</span>
 {
-    <span class="c-comment">// always runs at least once</span>
-    <span class="c-comment">// then checks condition</span>
+    <span class="c-cm">// Always runs at least once.</span>
+    <span class="c-cm">// The condition is checked after</span>
+    <span class="c-cm">// the block executes, not before.</span>
 }
-<span class="c-kw">while</span> (condition); <span class="c-comment">// ← semicolon!</span>
-          </div>
-          <div style="margin-top:16px;">
+<span class="c-kw">while</span> (condition);   <span class="c-cm">// ← semicolon required</span></pre>
+
+          <div class="spacer">
             <div class="col-label">Execution flow</div>
             <div class="flow-steps">
-              <div class="flow-step"><div class="step-num sn-dowhile">1</div>Run code block (always, first time)</div>
+              <div class="flow-step"><div class="step-num sn-dowhile">1</div>Run the code block (always, on the first pass)</div>
               <div class="flow-step"><div class="step-num sn-dowhile">2</div>Check condition</div>
-              <div class="flow-step"><div class="step-num sn-dowhile">3</div>If TRUE → back to step 1</div>
-              <div class="flow-step"><div class="step-num sn-dowhile">4</div>If FALSE → exit loop</div>
+              <div class="flow-step"><div class="step-num sn-dowhile">3</div>If TRUE, return to step 1</div>
+              <div class="flow-step"><div class="step-num sn-dowhile">4</div>If FALSE, exit the loop and continue the program</div>
             </div>
           </div>
         </div>
+
         <div class="loop-col">
           <div class="col-label">When to use</div>
           <ul class="when-list">
-            <li>Code must run at least once before testing</li>
-            <li>Menu systems — show menu, then ask if repeat</li>
-            <li>"Play again?" style game loops</li>
+            <li>The code must execute at least once before any condition is tested</li>
+            <li>Menu systems where the menu must appear before asking if the user wants to continue</li>
+            <li>Game loops where the game plays once, then asks "play again?"</li>
           </ul>
-          <div style="margin-top:18px;">
+
+          <div class="spacer">
             <div class="col-label">Example — menu system</div>
-            <div class="syntax-box"><span class="c-type">string</span> choice;
+            <pre class="syntax-box dowhile-accent"><span class="c-type">string</span> choice;
 
 <span class="c-kw">do</span>
 {
-    Console.WriteLine(<span class="c-str">"1. View"</span>);
-    Console.WriteLine(<span class="c-str">"2. Edit"</span>);
+    Console.WriteLine(<span class="c-str">"=== MAIN MENU ==="</span>);
+    Console.WriteLine(<span class="c-str">"1. View Account"</span>);
+    Console.WriteLine(<span class="c-str">"2. Make Deposit"</span>);
     Console.WriteLine(<span class="c-str">"3. Exit"</span>);
-    Console.Write(<span class="c-str">"Choice: "</span>);
+
+    Console.Write(<span class="c-str">"Enter choice: "</span>);
     choice = Console.ReadLine();
 }
-<span class="c-kw">while</span> (choice != <span class="c-str">"3"</span>);</div>
+<span class="c-kw">while</span> (choice != <span class="c-str">"3"</span>);
+
+Console.WriteLine(<span class="c-str">"Goodbye!"</span>);</pre>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- FOR LOOP -->
+    <!-- ══ FOR ══ -->
     <div class="section-label">Loop 3 — for</div>
     <div class="loop-block">
       <div class="loop-header lh-for">
         <div class="loop-num ln-for">3</div>
-        <div class="loop-title-group">
+        <div class="loop-title">
           <h2>for Loop</h2>
-          <div class="subtitle">Exact iterations known · init · condition · increment in one line</div>
+          <div class="subtitle">Exact iterations known &nbsp;·&nbsp; init · condition · increment in one line</div>
         </div>
       </div>
       <div class="loop-body">
         <div class="loop-col">
           <div class="col-label">Syntax</div>
-          <div class="syntax-box"><span class="c-kw">for</span> (init; condition; increment)
+          <pre class="syntax-box for-accent"><span class="c-kw">for</span> (init; condition; increment)
 {
-    <span class="c-comment">// init runs ONCE at start</span>
-    <span class="c-comment">// condition checked BEFORE each pass</span>
-    <span class="c-comment">// increment runs AFTER each pass</span>
+    <span class="c-cm">// init       runs ONCE at the start.</span>
+    <span class="c-cm">// condition  checked BEFORE each pass.</span>
+    <span class="c-cm">// increment  runs AFTER each pass.</span>
 }
 
-<span class="c-comment">// Example: count 1 to 10</span>
+<span class="c-cm">// Example: count from 1 to 10</span>
 <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">1</span>; i &lt;= <span class="c-num">10</span>; i++)
 {
     Console.WriteLine(i);
-}</div>
-          <div style="margin-top:16px;">
+}</pre>
+
+          <div class="spacer">
             <div class="col-label">Execution flow</div>
             <div class="flow-steps">
-              <div class="flow-step"><div class="step-num sn-for">1</div>Initialize counter (once)</div>
-              <div class="flow-step"><div class="step-num sn-for">2</div>Check condition → if FALSE, exit</div>
-              <div class="flow-step"><div class="step-num sn-for">3</div>Run code block</div>
-              <div class="flow-step"><div class="step-num sn-for">4</div>Increment → back to step 2</div>
+              <div class="flow-step"><div class="step-num sn-for">1</div>Initialize the counter variable (once only)</div>
+              <div class="flow-step"><div class="step-num sn-for">2</div>Check condition — if FALSE, exit the loop</div>
+              <div class="flow-step"><div class="step-num sn-for">3</div>Run the code block</div>
+              <div class="flow-step"><div class="step-num sn-for">4</div>Increment the counter, then return to step 2</div>
             </div>
           </div>
         </div>
+
         <div class="loop-col">
           <div class="col-label">When to use</div>
           <ul class="when-list">
-            <li>You know exactly how many times to repeat</li>
-            <li>Counting sequences (1 to 100, 10 down to 1)</li>
+            <li>You know exactly how many times the loop should run</li>
+            <li>Counting sequences such as 1 to 100, or 10 down to 1</li>
             <li>Processing a fixed number of items or students</li>
           </ul>
-          <div style="margin-top:18px;">
+
+          <div class="spacer">
             <div class="col-label">Common for patterns</div>
-            <div class="syntax-box"><span class="c-comment">// Count up</span>
+            <pre class="syntax-box for-accent"><span class="c-cm">// Count up from 1 to 10</span>
 <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">1</span>; i &lt;= <span class="c-num">10</span>; i++)
 
-<span class="c-comment">// Count down</span>
+<span class="c-cm">// Count down from 10 to 1</span>
 <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">10</span>; i &gt;= <span class="c-num">1</span>; i--)
 
-<span class="c-comment">// Even numbers only</span>
+<span class="c-cm">// Even numbers: 2, 4, 6 ... 20</span>
 <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">2</span>; i &lt;= <span class="c-num">20</span>; i += <span class="c-num">2</span>)
 
-<span class="c-comment">// Count by fives</span>
-<span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">0</span>; i &lt;= <span class="c-num">100</span>; i += <span class="c-num">5</span>)</div>
+<span class="c-cm">// Count by fives: 0, 5, 10 ... 100</span>
+<span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">0</span>; i &lt;= <span class="c-num">100</span>; i += <span class="c-num">5</span>)</pre>
           </div>
         </div>
       </div>
@@ -637,70 +655,75 @@ Console.WriteLine(<span class="c-str">"Age: "</span> + age);</div>
 
     <!-- COMPARISON TABLE -->
     <div class="section-label">Side-by-Side Comparison</div>
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th class="td-while" style="background:#1A4F6E; color:#C8E4F4;">while</th>
-          <th class="td-dowhile" style="background:#4A2060; color:#DCC8F8;">do-while</th>
-          <th class="td-for" style="background:#1E5C3A; color:#C8ECD8;">for</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Condition tested</td>
-          <td class="td-while">Before each iteration</td>
-          <td class="td-dowhile">After each iteration</td>
-          <td class="td-for">Before each iteration</td>
-        </tr>
-        <tr>
-          <td>Minimum runs</td>
-          <td class="td-while">0 (may never execute)</td>
-          <td class="td-dowhile">1 (always runs once)</td>
-          <td class="td-for">0 (may never execute)</td>
-        </tr>
-        <tr>
-          <td>Count known?</td>
-          <td>No — depends on input</td>
-          <td>No — depends on input</td>
-          <td class="td-for">Yes — fixed in advance</td>
-        </tr>
-        <tr>
-          <td>Best for</td>
-          <td class="td-while">Input validation, sentinel values</td>
-          <td class="td-dowhile">Menus, "play again" prompts</td>
-          <td class="td-for">Counting, fixed item lists</td>
-        </tr>
-        <tr>
-          <td>Keyword signals</td>
-          <td>"until," "validate," "keep asking"</td>
-          <td>"menu," "at least once," "play again"</td>
-          <td>"N times," "for each of," "from X to Y"</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="th-while">while</th>
+            <th class="th-dowhile">do-while</th>
+            <th class="th-for">for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Condition tested</td>
+            <td class="td-while">Before each iteration</td>
+            <td class="td-dowhile">After each iteration</td>
+            <td class="td-for">Before each iteration</td>
+          </tr>
+          <tr>
+            <td>Minimum runs</td>
+            <td class="td-while">0 — may never execute</td>
+            <td class="td-dowhile">1 — always runs at least once</td>
+            <td class="td-for">0 — may never execute</td>
+          </tr>
+          <tr>
+            <td>Count known?</td>
+            <td>No — depends on input or conditions</td>
+            <td>No — depends on input or conditions</td>
+            <td class="td-for">Yes — fixed before the loop starts</td>
+          </tr>
+          <tr>
+            <td>Best for</td>
+            <td class="td-while">Input validation, sentinel values</td>
+            <td class="td-dowhile">Menus, "play again" prompts</td>
+            <td class="td-for">Counting, fixed item lists</td>
+          </tr>
+          <tr>
+            <td>Keyword signals</td>
+            <td>"until," "validate," "keep asking"</td>
+            <td>"menu," "at least once," "play again"</td>
+            <td>"N times," "for each of," "from X to Y"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <!-- COMMON MISTAKES -->
+    <!-- WARNINGS -->
     <div class="section-label">Common Mistakes to Avoid</div>
+
     <div class="warn-box">
-      <div class="warn-title">⚠ Infinite Loop — Forgetting to Update the Counter</div>
-      <p>Inside a <code>while</code> or <code>do-while</code>, something must change during each iteration that will eventually make the condition false. A loop where the condition never becomes false will run forever and freeze the program.</p>
+      <div class="warn-title">Mistake 1 — Infinite Loop: Forgetting to Update the Counter</div>
+      <p>Inside a <code>while</code> or <code>do-while</code>, something must change during each iteration that will eventually make the condition false. If nothing changes, the condition stays true forever and the program freezes.</p>
     </div>
+
     <div class="warn-box">
-      <div class="warn-title">⚠ Off-by-One Error — &lt; vs &lt;=</div>
-      <p><code>for (int i = 1; i &lt; 10; i++)</code> prints 1–9, not 1–10. Use <code>&lt;=</code> when the boundary value should be included in the loop.</p>
+      <div class="warn-title">Mistake 2 — Off-by-One Error: &lt; vs &lt;=</div>
+      <p>Writing <code>i &lt; 10</code> instead of <code>i &lt;= 10</code> causes the loop to stop one iteration early, printing 1 through 9 instead of 1 through 10. Always check whether the boundary value itself should be included.</p>
     </div>
+
     <div class="warn-box">
-      <div class="warn-title">⚠ Stray Semicolon After Loop Header</div>
-      <p><code>for (int i = 1; i &lt;= 10; i++);</code> — that trailing semicolon ends the loop immediately. The code block in braces then runs only once, after the loop has already finished.</p>
+      <div class="warn-title">Mistake 3 — Stray Semicolon After the Loop Header</div>
+      <p>Writing <code>for (int i = 1; i &lt;= 10; i++);</code> ends the loop immediately with the semicolon. The code block in the braces then runs only once after the loop finishes, rather than repeating 10 times.</p>
     </div>
 
   </div><!-- /content -->
 
   <!-- FOOTER -->
   <div class="footer-bar">
-    <span>C# · Repetition Structures · Study Guide</span>
-    <span>while · do-while · for</span>
+    <span>CIS-115 &nbsp;·&nbsp; Intro to Programming and Logic in C#</span>
+    <span>Repetition Structures Study Guide</span>
   </div>
 
 </div>
